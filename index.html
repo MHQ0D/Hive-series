@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="MHQ Hive Series · How We Work Better · Workload Self-Assessment">
+<title>How Well Are You Carrying the Weight? — MHQ Hive Series</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:#F9F8F5;color:#444441;font-size:16px;line-height:1.6}
+#root{min-height:100vh}
+.ph{background:#1A1A1A;padding:32px 24px 28px;text-align:center}
+.ph-series{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#AFA9EC;margin-bottom:12px}
+.ph-title{font-size:clamp(22px,5vw,36px);font-weight:700;color:#fff;line-height:1.2;margin-bottom:10px}
+.ph-sub{font-size:15px;font-style:italic;color:rgba(255,255,255,.5)}
+.wrap{max-width:680px;margin:0 auto;padding:32px 20px 60px}
+.how-to{background:#F4F3EE;border-radius:10px;padding:16px 20px;margin-bottom:28px}
+.how-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#888780;margin-bottom:6px}
+.how-p{font-size:13.5px;line-height:1.65}
+.card{background:#fff;border:1px solid #D3D1C7;border-left:4px solid #AFA9EC;border-radius:12px;padding:22px 24px 20px;margin-bottom:14px;transition:border-left-color .2s,box-shadow .2s}
+.card.rated{border-left-color:#5B4FCF;box-shadow:0 2px 14px rgba(91,79,207,.08)}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.c-num{font-size:11px;font-weight:700;color:#5B4FCF;letter-spacing:.05em;text-transform:uppercase}
+.c-dim{font-size:11px;font-weight:700;color:#3C3489;background:#EEEDFE;padding:3px 11px;border-radius:20px}
+.c-text{font-size:16px;font-weight:600;color:#1A1A1A;line-height:1.5;margin-bottom:6px}
+.c-prompt{font-size:13px;font-style:italic;color:#888780;margin-bottom:20px;line-height:1.5}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:6px}
+.sb{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:none;cursor:pointer;padding:0;flex:1}
+.sc{width:46px;height:46px;border-radius:50%;border:1.5px solid #D3D1C7;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#888780;background:#fff;transition:all .14s ease}
+.sb:hover .sc{border-color:#AFA9EC;color:#5B4FCF;background:#EEEDFE}
+.sc.sel{background:#5B4FCF;border-color:#5B4FCF;color:#fff;transform:scale(1.1);box-shadow:0 3px 12px rgba(91,79,207,.3)}
+.sd{font-size:10.5px;color:#888780;text-align:center;line-height:1.35;max-width:66px;min-height:30px}
+.send{display:flex;justify-content:space-between;padding:0 3px}
+.se{font-size:11px;color:#888780}
+.prog-row{display:flex;align-items:center;gap:14px;margin:28px 0 10px}
+.prog-track{flex:1;height:5px;background:#D3D1C7;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:#5B4FCF;border-radius:3px;transition:width .3s ease}
+.prog-lbl{font-size:12px;color:#888780;white-space:nowrap}
+.go{width:100%;padding:15px 24px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.01em}
+.go:disabled{opacity:.42;cursor:not-allowed}
+/* results */
+.r-band{border-radius:12px;padding:20px 22px;margin-bottom:18px}
+.r-eye{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.r-title{font-size:21px;font-weight:700;margin-bottom:7px;line-height:1.3}
+.r-sub{font-size:14px;line-height:1.65}
+.meter-t{height:7px;background:#D3D1C7;border-radius:4px;overflow:hidden;margin:18px 0 4px}
+.meter-f{height:100%;border-radius:4px;width:0%;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.m-ends{display:flex;justify-content:space-between;font-size:11px;color:#888780;margin-bottom:20px}
+.breakdown{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
+.bc{background:#F4F3EE;border-radius:9px;padding:11px 6px 9px;text-align:center}
+.bc-l{font-size:9.5px;font-weight:700;color:#888780;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px;line-height:1.3}
+.bc-v{font-size:22px;font-weight:700;color:#444441;line-height:1}
+.bc-m{font-size:11px;color:#888780;font-weight:400}
+.spotlight{background:#fff;border:1px solid #D3D1C7;border-radius:10px;padding:16px 18px;margin-bottom:12px}
+.sp-l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px}
+.sp-t{font-size:14px;line-height:1.65;color:#444441}
+.cta-box{background:#EEEDFE;border-left:4px solid #5B4FCF;border-radius:0 10px 10px 0;padding:18px 20px;margin-top:20px}
+.cta-l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#3C3489;margin-bottom:7px}
+.cta-t{font-size:14px;color:#3C3489;line-height:1.65}
+.traits{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.trait{font-size:11px;font-weight:600;padding:3px 11px;border-radius:20px}
+.retake{display:block;margin:20px auto 0;background:none;border:none;font-size:13px;color:#888780;text-decoration:underline;cursor:pointer;padding:4px}
+.retake:hover{color:#444441}
+.sources{margin-top:36px;padding-top:20px;border-top:1px solid #D3D1C7}
+.src-l{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#888780;margin-bottom:10px}
+.src-i{font-size:12px;color:#888780;line-height:1.75;margin-bottom:3px}
+.src-b{color:#444441}
+.pf{text-align:center;padding:18px 24px 32px;font-size:12px;color:#888780;border-top:1px solid #D3D1C7}
+@media(max-width:480px){.sc{width:40px;height:40px;font-size:13px}.sd{font-size:9.5px;max-width:54px}.bc-v{font-size:18px}}
+@media(prefers-reduced-motion:reduce){*,.sc,.meter-f,.prog-fill{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+/* ── DATA ── */
+var STMTS=[
+  {id:1,dim:"Clarity",
+   text:"At the end of most weeks, I can name the three things that mattered most.",
+   prompt:"Think about last week. Could you name them now?",
+   opts:["Rarely — the week just… happens","Sometimes, but only in hindsight","About half the time","Most weeks, yes","Always — I start Monday knowing this"]},
+  {id:2,dim:"Having a system",
+   text:"When something new lands on my plate, I have a way of deciding what moves up and what waits.",
+   prompt:"Do you have a reliable method — or does it depend on who asked loudest?",
+   opts:["No method — it all feels urgent","I wing it and hope for the best","I have a rough approach","Yes — fairly consistent","Always — I have a clear system"]},
+  {id:3,dim:"Courage",
+   text:"I feel comfortable telling my supervisor or team when my workload is at — or beyond — capacity.",
+   prompt:"When did you last say “I’m stretched” before things got bad?",
+   opts:["Never — I just absorb it","Only when things break down","Sometimes, with hesitation","Usually, though not easy","Yes — I speak up early"]},
+  {id:4,dim:"Focus",
+   text:"I can tell the difference between work that genuinely moves things forward and work that just keeps me busy.",
+   prompt:"How much of your week is motion — and how much is real progress?",
+   opts:["I can’t really tell the difference","Occasionally I notice it","I notice — but still get pulled in","Yes — and I redirect myself","Clearly — I protect impact time"]},
+  {id:5,dim:"Boundaries",
+   text:"When asked to take on something new, I can push back thoughtfully — without guilt — if my plate is already full.",
+   prompt:"What does “not yet” sound like in your voice?",
+   opts:["I almost always say yes","I want to push back but can’t","I try — it’s still uncomfortable","Usually yes, with some effort","Yes — I say “not yet” clearly"]}
+];
+var STR=["Clear weekly priorities are a genuine strength. Your energy goes where it counts — that directional awareness is the foundation of everything else.","A reliable triage method is rare and genuinely valuable. You’re making intentional decisions about your work, not just reacting to whoever asked loudest.","Speaking up about capacity early takes real Courage. You’re protecting yourself and your team — and modelling what good looks like.","Distinguishing impact from busy-ness is harder than it sounds. The fact that you notice — and redirect — puts you ahead of most.","Being able to say “not yet” without guilt is one of the most underrated professional skills. You’re living the Excellence trait: quality over volume."];
+var GRW=["Clarity on weekly priorities is your biggest growth edge. Without it, everything competes equally for your attention — and nothing gets your best.","Without a reliable way to triage new work, urgency wins every time. The loudest request — not the most important one — ends up dictating your week.","Staying silent when you’re at capacity is a short-term fix that compounds. The Growth trait asks us to be humble enough to say: I need help.","When we can’t separate motion from progress, we stay busy without moving forward. This is the completion bias in action — and naming it is the first step.","Always saying yes can feel like commitment. But it often means doing many things at average quality. Excellence asks more than volume from us."];
+var CTA=["Before Friday, write down the three outcomes that would make this week feel worthwhile. Not tasks — outcomes. Then check back on Friday.","The next time something new lands on your plate, pause for 60 seconds: is this more important than what I’m already working on?","This week, find one moment to say “my plate is fairly full right now” — to your supervisor or team. Before things get bad. Just to practise.","Identify one thing on your list that feels busy but isn’t moving anything important forward. Decide: stop it, simplify it, or hand it over.","Next time you’re asked to take something on, try: “I want to do this well — can we talk about what I should deprioritise to make room?”"];
+var SRCS=[
+  {n:1,r:"Covey, S.R. (1989). The 7 Habits of Highly Effective People. Free Press.",t:"Urgency vs. importance; informs S1 & S2."},
+  {n:2,r:"Edmondson, A.C. (1999). Psychological safety and learning in work teams. Administrative Science Quarterly, 44(2).",t:"Informs S3."},
+  {n:3,r:"Kahneman, D. (2011). Thinking, Fast and Slow. Farrar, Straus and Giroux.",t:"Completion bias; informs S4."},
+  {n:4,r:"Dweck, C.S. (2006). Mindset: The New Psychology of Success. Random House.",t:"Growth mindset; informs S5."},
+  {n:5,r:"MHQ OD Team (2026). MHQ Culture Traits & FY2026 OD Workplan. Human Resource Division, MHA.",t:"Trait language & overall framing."}
+];
+var DIMS=["Clarity","System","Courage","Focus","Boundaries"];
+
+/* ── STATE ── */
+var scores=[null,null,null,null,null];
+var submitted=false;
+
+/* ── HELPERS ── */
+function h(tag,cls,attrs,children){
+  var el=document.createElement(tag);
+  if(cls)el.className=cls;
+  if(attrs)Object.keys(attrs).forEach(function(k){
+    if(k==='style'&&typeof attrs[k]==='object'){Object.assign(el.style,attrs[k]);}
+    else el.setAttribute(k,attrs[k]);
+  });
+  if(children){
+    (Array.isArray(children)?children:[children]).forEach(function(c){
+      if(c==null)return;
+      el.appendChild(typeof c==='string'?document.createTextNode(c):c);
+    });
+  }
+  return el;
+}
+
+/* ── RENDER SCALE BTN ── */
+function makeScaleBtn(q,val,label){
+  var circle=h('div','sc',null,[String(val)]);
+  if(scores[q-1]===val)circle.classList.add('sel');
+  var desc=h('span','sd',null,[label]);
+  var btn=h('button','sb',{'aria-label':val+' — '+label},[circle,desc]);
+  btn.addEventListener('click',function(){rate(q,val);});
+  return btn;
+}
+
+/* ── RENDER CARD ── */
+function makeCard(stmt,idx){
+  var rated=scores[stmt.id-1]!==null;
+  var card=h('div','card'+(rated?' rated':'')+' card-'+stmt.id,null,[
+    h('div','card-hdr',null,[
+      h('span','c-num',null,['Statement '+idx+' of '+STMTS.length]),
+      h('span','c-dim',null,[stmt.dim])
+    ]),
+    h('p','c-text',null,[stmt.text]),
+    h('p','c-prompt',null,[stmt.prompt]),
+    (function(){
+      var scale=h('div','scale',null,
+        stmt.opts.map(function(o,i){return makeScaleBtn(stmt.id,i+1,o);})
+      );
+      return scale;
+    })(),
+    h('div','send',null,[
+      h('span','se',null,['Not at all']),
+      h('span','se',null,['Absolutely'])
+    ])
+  ]);
+  return card;
+}
+
+/* ── RATE ── */
+function rate(q,val){
+  var prev=scores[q-1];
+  scores[q-1]=val;
+  if(prev===null){
+    var done=scores.filter(function(s){return s!==null;}).length;
+    var pct=Math.round(done/5*100);
+    var pf=document.getElementById('pf');
+    if(pf)pf.style.width=pct+'%';
+    var pl=document.getElementById('pl');
+    if(pl)pl.textContent=done+' / 5 rated';
+    var go=document.getElementById('go');
+    if(go)go.disabled=done<5;
+  }
+  // update all circles in this question
+  for(var i=1;i<=5;i++){
+    var c=document.querySelector('.card-'+q+' .sc:nth-child('+i+')');
+  }
+  // re-render just this card
+  var oldCard=document.querySelector('.card-'+q);
+  if(oldCard){
+    var stmt=STMTS[q-1];
+    var idx=q;
+    var newCard=makeCard(stmt,idx);
+    oldCard.parentNode.replaceChild(newCard,oldCard);
+  }
+}
+
+/* ── RESULTS ── */
+function renderResults(){
+  var total=scores.reduce(function(a,b){return a+b;},0);
+  var pct=Math.round(total/25*100);
+  var band,mColor;
+  if(pct>=76){
+    band={bg:'#E1F5EE',border:'#9FE1CB',eye:'#085041',
+      label:'Carrying it well — '+pct+'%',
+      title:"You’re in a strong rhythm.",
+      sub:"Your working habits are solid across most areas. You have clarity, a system, and the courage to speak up when needed. The opportunity now is making these habits more intentional — and helping your team get there too."};
+    mColor='#1D9E75';
+  }else if(pct>=44){
+    band={bg:'#FAEEDA',border:'#FAC775',eye:'#633806',
+      label:'Developing — '+pct+'%',
+      title:"Good instincts, uneven habits.",
+      sub:"You have the right instincts but they’re not yet consistent. A few small, intentional changes could meaningfully shift how your weeks feel — and how effective you actually are."};
+    mColor='#EF9F27';
+  }else{
+    band={bg:'#FAECE7',border:'#F5C4B3',eye:'#993C1D',
+      label:'Worth addressing — '+pct+'%',
+      title:"This is a signal worth paying attention to.",
+      sub:"The way you’re carrying the load right now isn’t sustainable — and you probably already sense that. That awareness is the starting point, not a verdict. Start small."};
+    mColor='#D85A30';
+  }
+  var maxV=-1,maxI=0,minV=6,minI=0;
+  for(var j=0;j<5;j++){
+    if(scores[j]>maxV){maxV=scores[j];maxI=j;}
+    if(scores[j]<minV){minV=scores[j];minI=j;}
+  }
+  if(maxV===minV){maxI=0;minI=4;}
+
+  var rBand=h('div','r-band',{style:{background:band.bg,border:'1px solid '+band.border}},[
+    h('p','r-eye',{style:{color:band.eye}},[band.label]),
+    h('p','r-title',{style:{color:band.eye}},[band.title]),
+    h('p','r-sub',{style:{color:band.eye}},[band.sub])
+  ]);
+
+  var meterTrack=h('div','meter-t',null,[h('div','meter-f',{id:'mf'},null)]);
+  var meterEnds=h('div','m-ends',null,[h('span',null,null,['Just starting out']),h('span',null,null,['Carrying it well'])]);
+
+  var bkdown=h('div','breakdown',null,
+    scores.map(function(s,i){
+      return h('div','bc',null,[
+        h('p','bc-l',null,[DIMS[i]]),
+        h('p','bc-v',null,[String(s),h('span','bc-m',null,['/5'])])
+      ]);
+    })
+  );
+
+  var strBox=h('div','spotlight',null,[
+    h('p','sp-l',{style:{color:'#085041'}},['Your strength']),
+    h('p','sp-t',null,[STR[maxI]])
+  ]);
+  var grwBox=h('div','spotlight',null,[
+    h('p','sp-l',{style:{color:'#633806'}},['Your growth edge']),
+    h('p','sp-t',null,[GRW[minI]])
+  ]);
+
+  var ctaBox=h('div','cta-box',null,[
+    h('p','cta-l',null,['One thing to try this week']),
+    h('p','cta-t',null,[CTA[minI]]),
+    h('div','traits',null,[
+      h('span','trait',{style:{background:'#EAF3DE',color:'#3B6D11'}},['Growth']),
+      h('span','trait',{style:{background:'#E6F1FB',color:'#185FA5'}},['Excellence']),
+      h('span','trait',{style:{background:'#FAECE7',color:'#993C1D'}},['Courage'])
+    ])
+  ]);
+
+  var retakeBtn=h('button','retake',null,['Retake the assessment']);
+  retakeBtn.addEventListener('click',function(){
+    scores=[null,null,null,null,null];
+    submitted=false;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  var srcDiv=h('div','sources',null,[
+    h('p','src-l',null,['Sources & frameworks']),
+    ...SRCS.map(function(s){
+      return h('p','src-i',null,[
+        String(s.n)+'. ',
+        h('span','src-b',null,[s.r]),
+        ' — '+s.t
+      ]);
+    })
+  ]);
+
+  return [rBand,meterTrack,meterEnds,bkdown,strBox,grwBox,ctaBox,retakeBtn,srcDiv];
+}
+
+/* ── QUIZ ── */
+function renderQuiz(){
+  var done=scores.filter(function(s){return s!==null;}).length;
+  var pct=Math.round(done/5*100);
+  var allDone=done===5;
+
+  var howTo=h('div','how-to',null,[
+    h('p','how-lbl',null,['How to use this']),
+    h('p','how-p',null,['Read each statement and select the number that feels most true for you right now. Be honest — this is for your own reflection, not your appraisal. Complete all five to see your personalised results.'])
+  ]);
+
+  var cards=STMTS.map(function(stmt,i){return makeCard(stmt,i+1);});
+
+  var progRow=h('div','prog-row',null,[
+    h('div','prog-track',null,[
+      h('div','prog-fill',{id:'pf',style:{width:pct+'%'}},null)
+    ]),
+    h('span','prog-lbl',{id:'pl'},[done+' / 5 rated'])
+  ]);
+
+  var goStyle={
+    background:allDone?'#EEEDFE':'#F4F3EE',
+    color:allDone?'#3C3489':'#888780',
+    border:'1.5px solid '+(allDone?'#AFA9EC':'#D3D1C7')
+  };
+  var goBtn=h('button','go',{id:'go',style:goStyle},['See my results →']);
+  if(!allDone)goBtn.disabled=true;
+  goBtn.addEventListener('click',function(){
+    if(scores.filter(function(s){return s!==null;}).length<5)return;
+    submitted=true;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+
+  return [howTo,...cards,progRow,goBtn];
+}
+
+/* ── MAIN RENDER ── */
+function render(){
+  var root=document.getElementById('root');
+  root.innerHTML='';
+
+  var header=h('div','ph',null,[
+    h('p','ph-series',null,['Hive Series · How We Work Better · Article 1']),
+    h('h1','ph-title',null,['How well are you carrying the weight?']),
+    h('p','ph-sub',null,['Five statements. Two minutes. Your honest take.'])
+  ]);
+  root.appendChild(header);
+
+  var wrap=h('main','wrap',null,[]);
+  root.appendChild(wrap);
+
+  var children=submitted?renderResults():renderQuiz();
+  children.forEach(function(c){if(c)wrap.appendChild(c);});
+
+  var footer=h('div','pf',null,['How We Work Better  ·  Hive Series  ·  MHQ OD Team  ·  June 2026']);
+  root.appendChild(footer);
+
+  // animate meter after paint
+  if(submitted){
+    var total=scores.reduce(function(a,b){return a+b;},0);
+    var pct=Math.round(total/25*100);
+    var mColor=pct>=76?'#1D9E75':pct>=44?'#EF9F27':'#D85A30';
+    setTimeout(function(){
+      var mf=document.getElementById('mf');
+      if(mf){mf.style.width=pct+'%';mf.style.background=mColor;}
+    },100);
+  }
+}
+
+render();
+</script>
+</body>
+</html>
